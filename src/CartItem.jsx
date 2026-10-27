@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { removeItem, updateQuantity } from './CartSlice';
+import { addItem, removeItem, updateQuantity } from './CartSlice';
 
 export default function CartItem({ onContinueShopping }) {
   const cart = useSelector(state => state.cart.items);
@@ -22,7 +22,7 @@ export default function CartItem({ onContinueShopping }) {
   };
 
   const handleIncrement = item => {
-    dispatch(updateQuantity({ name: item.name, quantity: item.quantity + 1 }));
+    dispatch(addItem(item));
   };
 
   const handleDecrement = item => {

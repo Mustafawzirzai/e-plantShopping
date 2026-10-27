@@ -6,6 +6,7 @@ import { plantGroups as plantsArray } from './plants';
 export default function ProductList() {
   const dispatch = useDispatch();
   const items = useSelector(state => state.cart.items);
+  const calculateTotalQuantity = () => items.reduce((total, item) => total + item.quantity, 0);
   const [addedToCart, setAddedToCart] = useState(() =>
     Object.fromEntries(items.map(item => [item.name, true]))
   );
@@ -19,7 +20,7 @@ export default function ProductList() {
     setAddedToCart(previous => ({ ...previous, [plant.name]: true }));
   };
 
-  return <><h1>Our Plants</h1>{plantsArray.map(group => <section key={group.category}>
+  return <><h1>Our Plants</h1><p aria-live="polite">Items in cart: {calculateTotalQuantity()}</p>{plantsArray.map(group => <section key={group.category}>
     <h2>{group.category}</h2><p>{group.description}</p>
     <div className="product-grid">{group.plants.map(plant => {
       const added = Boolean(addedToCart[plant.name]);

@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { addItem, removeItem, updateQuantity } from './CartSlice';
+import { removeItem, updateQuantity } from './CartSlice';
 
 export default function CartItem({ onContinueShopping }) {
   const cart = useSelector(state => state.cart.items);
@@ -22,7 +22,7 @@ export default function CartItem({ onContinueShopping }) {
   };
 
   const handleIncrement = item => {
-    dispatch(addItem(item));
+    dispatch(updateQuantity({ name: item.name, quantity: item.quantity + 1 }));
   };
 
   const handleDecrement = item => {
@@ -35,22 +35,22 @@ export default function CartItem({ onContinueShopping }) {
 
   const handleRemove = item => dispatch(removeItem(item.name));
 
-  return <section><h1>Shopping Cart</h1>
+  return <section className="cart-container"><h1>Shopping Cart</h1>
     {!cart.length && <p>Your cart is empty.</p>}
     {cart.map(item => <article className="cart-item" key={item.name}>
-      <img src={item.image} alt={item.name} />
-      <div><h2>{item.name}</h2><p>Unit price: {item.cost}</p>
-        <div className="quantity">
-          <button aria-label={'Decrease ' + item.name} onClick={() => handleDecrement(item)}>-</button>
-          <span aria-live="polite">{item.quantity}</span>
-          <button aria-label={'Increase ' + item.name} onClick={() => handleIncrement(item)}>+</button>
+      <img className="cart-item-image" src={item.image} alt={item.name} />
+      <div className="cart-item-details"><h2 className="cart-item-name">{item.name}</h2><p className="cart-item-cost">Unit price: {item.cost}</p>
+        <div className="cart-item-quantity quantity">
+          <button className="cart-item-button cart-item-button-dec" aria-label={'Decrease ' + item.name} onClick={() => handleDecrement(item)}>-</button>
+          <span className="cart-item-quantity-value" aria-live="polite">{item.quantity}</span>
+          <button className="cart-item-button cart-item-button-inc" aria-label={'Increase ' + item.name} onClick={() => handleIncrement(item)}>+</button>
         </div>
-        <p aria-live="polite">Subtotal: $ {calculateTotalCost(item).toFixed(2)}</p>
-        <button className="delete" onClick={() => handleRemove(item)}>Delete</button>
+        <p className="cart-item-total" aria-live="polite">Subtotal: $ {calculateTotalCost(item).toFixed(2)}</p>
+        <button className="cart-item-delete" onClick={() => handleRemove(item)}>Delete</button>
       </div>
     </article>)}
     <h2 aria-live="polite">Total Cart Amount: $ {calculateTotalAmount().toFixed(2)}</h2>
-    <button onClick={handleContinueShopping}>Continue Shopping</button>{' '}
-    <button disabled={!cart.length} onClick={handleCheckoutShopping}>Checkout</button>
+    <button className="get-started-button" onClick={handleContinueShopping}>Continue Shopping</button>{' '}
+    <button className="get-started-button1" disabled={!cart.length} onClick={handleCheckoutShopping}>Checkout</button>
   </section>;
 }

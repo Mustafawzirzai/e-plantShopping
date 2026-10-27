@@ -4,7 +4,7 @@ A simple online plant shop built with React and Redux Toolkit. The e-plantShoppi
 
 ## Features
 - Landing page with Get Started and About Us.
-- Two plant categories with images, names, descriptions, and prices.
+- Three plant categories with six plants each with images, names, descriptions, and prices.
 - Add to cart buttons that become disabled after adding a plant.
 - Navigation with the total cart quantity.
 - Cart with quantity controls, delete buttons, subtotals, and a total.
@@ -28,4 +28,4 @@ Cart data resets on page refresh. Checkout is a demonstration; it does not take 
 ## Submission
 Repository: https://github.com/Mustafawzirzai/e-plantShopping
 
-Commit and push the completed files before submission. The Vite base path is configured for GitHub Pages at /e-plantShopping/. A live deployment must be set up and verified separately.
+Commit and push the completed files before submission. The Vite base path is configured for GitHub Pages at /e-plantShopping/. Live application: https://mustafawzirzai.github.io/e-plantShopping/

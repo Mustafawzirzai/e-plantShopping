@@ -19,3 +19,16 @@ section { margin-bottom: 30px; }
 .delete { background: #b13d32; }
 @media (max-width: 700px) { .product-grid { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 450px) { .product-grid { grid-template-columns: 1fr; } .cart-item { gap: 15px; padding: 12px; } .cart-item img { width: 90px; height: 120px; } }
+
+/* Assignment layout and landing background. */
+.product-grid { display: block; }
+.product-list { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+.navbar a { color: white; text-decoration: none; padding: 6px 10px; display: inline-flex; align-items: center; gap: 7px; }
+.navbar a:hover { text-decoration: underline; }
+.cart_quantity_count { background: white; color: #285c31; border-radius: 50%; min-width: 26px; text-align: center; }
+.landing-page { position: relative; max-width: none; min-height: 100vh; isolation: isolate; }
+.background-image { position: absolute; inset: 0; z-index: -1; background-image: linear-gradient(#15381ed9, #15381eaa), url('https://cdn.pixabay.com/photo/2017/07/13/08/59/greenhouse-2499758_1280.jpg'); background-size: cover; background-position: center; }
+.landing-page h1, .landing-page > section > p { color: white; }
+.cart-item-delete { background: #b13d32; }
+@media (max-width: 700px) { .product-list { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 450px) { .product-list { grid-template-columns: 1fr; } }

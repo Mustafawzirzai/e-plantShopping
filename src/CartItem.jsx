@@ -1,68 +1,28 @@
-import React from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { removeItem, updateQuantity } from './CartSlice';
-import './CartItem.css';
 
-const CartItem = ({ onContinueShopping }) => {
-  const cart = useSelector(state => state.cart.items);
+export default function CartItem() {
+  const items = useSelector(state => state.cart.items);
   const dispatch = useDispatch();
-
-  // Calculate total amount for all products in the cart
-  const calculateTotalAmount = () => {
- 
-  };
-
-  const handleContinueShopping = (e) => {
-   
-  };
-
-
-
-  const handleIncrement = (item) => {
-  };
-
-  const handleDecrement = (item) => {
-   
-  };
-
-  const handleRemove = (item) => {
-  };
-
-  // Calculate total cost based on quantity for an item
-  const calculateTotalCost = (item) => {
-  };
-
-  return (
-    <div className="cart-container">
-      <h2 style={{ color: 'black' }}>Total Cart Amount: ${calculateTotalAmount()}</h2>
-      <div>
-        {cart.map(item => (
-          <div className="cart-item" key={item.name}>
-            <img className="cart-item-image" src={item.image} alt={item.name} />
-            <div className="cart-item-details">
-              <div className="cart-item-name">{item.name}</div>
-              <div className="cart-item-cost">{item.cost}</div>
-              <div className="cart-item-quantity">
-                <button className="cart-item-button cart-item-button-dec" onClick={() => handleDecrement(item)}>-</button>
-                <span className="cart-item-quantity-value">{item.quantity}</span>
-                <button className="cart-item-button cart-item-button-inc" onClick={() => handleIncrement(item)}>+</button>
-              </div>
-              <div className="cart-item-total">Total: ${calculateTotalCost(item)}</div>
-              <button className="cart-item-delete" onClick={() => handleRemove(item)}>Delete</button>
-            </div>
-          </div>
-        ))}
+  const [message, setMessage] = useState('');
+  const total = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  return <section><h1>Shopping Cart</h1>
+    {!items.length && <p>Your cart is empty.</p>}
+    {items.map(item => <article className="cart-item" key={item.id}>
+      <img src={item.image} alt={item.name} />
+      <div><h2>{item.name}</h2><p>Unit price: {item.cost}</p>
+        <div className="quantity">
+          <button aria-label={'Decrease ' + item.name} onClick={() => dispatch(updateQuantity({ name: item.name, quantity: item.quantity - 1 }))}>-</button>
+          <span>{item.quantity}</span>
+          <button aria-label={'Increase ' + item.name} onClick={() => dispatch(updateQuantity({ name: item.name, quantity: item.quantity + 1 }))}>+</button>
+        </div>
+        <p>Subtotal: $ {(item.price * item.quantity).toFixed(2)}</p>
+        <button className="delete" onClick={() => dispatch(removeItem(item.name))}>Delete</button>
       </div>
-      <div style={{ marginTop: '20px', color: 'black' }} className='total_cart_amount'></div>
-      <div className="continue_shopping_btn">
-        <button className="get-started-button" onClick={(e) => handleContinueShopping(e)}>Continue Shopping</button>
-        <br />
-        <button className="get-started-button1">Checkout</button>
-      </div>
-    </div>
-  );
-};
-
-export default CartItem;
-
-
+    </article>)}
+    <h2 aria-live="polite">Total Cart Amount: $ {total.toFixed(2)}</h2>
+    <button disabled={!items.length} onClick={() => setMessage('Checkout is coming soon!')}>Checkout</button>
+    {message && <p role="status">{message}</p>}
+  </section>;
+}

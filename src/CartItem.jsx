@@ -1,28 +1,56 @@
-import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { removeItem, updateQuantity } from './CartSlice';
 
-export default function CartItem() {
-  const items = useSelector(state => state.cart.items);
+export default function CartItem({ onContinueShopping }) {
+  const cart = useSelector(state => state.cart.items);
   const dispatch = useDispatch();
-  const [message, setMessage] = useState('');
-  const total = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
+
+  const calculateTotalAmount = () => {
+    let total = 0;
+    cart.forEach(item => {
+      total += parseFloat(item.cost.substring(1)) * item.quantity;
+    });
+    return total;
+  };
+
+  const calculateTotalCost = item => parseFloat(item.cost.substring(1)) * item.quantity;
+
+  const handleContinueShopping = e => onContinueShopping(e);
+
+  const handleCheckoutShopping = () => {
+    alert('Functionality to be added for future reference');
+  };
+
+  const handleIncrement = item => {
+    dispatch(updateQuantity({ name: item.name, quantity: item.quantity + 1 }));
+  };
+
+  const handleDecrement = item => {
+    if (item.quantity > 1) {
+      dispatch(updateQuantity({ name: item.name, quantity: item.quantity - 1 }));
+    } else {
+      dispatch(removeItem(item.name));
+    }
+  };
+
+  const handleRemove = item => dispatch(removeItem(item.name));
+
   return <section><h1>Shopping Cart</h1>
-    {!items.length && <p>Your cart is empty.</p>}
-    {items.map(item => <article className="cart-item" key={item.id}>
+    {!cart.length && <p>Your cart is empty.</p>}
+    {cart.map(item => <article className="cart-item" key={item.name}>
       <img src={item.image} alt={item.name} />
       <div><h2>{item.name}</h2><p>Unit price: {item.cost}</p>
         <div className="quantity">
-          <button aria-label={'Decrease ' + item.name} onClick={() => dispatch(updateQuantity({ name: item.name, quantity: item.quantity - 1 }))}>-</button>
-          <span>{item.quantity}</span>
-          <button aria-label={'Increase ' + item.name} onClick={() => dispatch(updateQuantity({ name: item.name, quantity: item.quantity + 1 }))}>+</button>
+          <button aria-label={'Decrease ' + item.name} onClick={() => handleDecrement(item)}>-</button>
+          <span aria-live="polite">{item.quantity}</span>
+          <button aria-label={'Increase ' + item.name} onClick={() => handleIncrement(item)}>+</button>
         </div>
-        <p>Subtotal: $ {(item.price * item.quantity).toFixed(2)}</p>
-        <button className="delete" onClick={() => dispatch(removeItem(item.name))}>Delete</button>
+        <p aria-live="polite">Subtotal: $ {calculateTotalCost(item).toFixed(2)}</p>
+        <button className="delete" onClick={() => handleRemove(item)}>Delete</button>
       </div>
     </article>)}
-    <h2 aria-live="polite">Total Cart Amount: $ {total.toFixed(2)}</h2>
-    <button disabled={!items.length} onClick={() => setMessage('Checkout is coming soon!')}>Checkout</button>
-    {message && <p role="status">{message}</p>}
+    <h2 aria-live="polite">Total Cart Amount: $ {calculateTotalAmount().toFixed(2)}</h2>
+    <button onClick={handleContinueShopping}>Continue Shopping</button>{' '}
+    <button disabled={!cart.length} onClick={handleCheckoutShopping}>Checkout</button>
   </section>;
 }
